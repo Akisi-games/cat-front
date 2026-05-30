@@ -1,0 +1,9 @@
+# Netlify 設定 — 静的サイトとして public/ を公開
+[build]
+  publish = "docs"
+  command = ""
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Cache-Control = "public, max-age=3600"

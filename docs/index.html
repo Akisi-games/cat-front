@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#1b2a4a" />
+  <title>CAT FRONT — キャットフロント</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="assets/icon_coin.png" />
+</head>
+<body>
+  <div id="app">
+    <!-- タイトル画面 -->
+    <section id="title-screen" class="screen active">
+      <div class="title-inner">
+        <h1 class="game-title">CAT FRONT</h1>
+        <p class="game-sub">― キャットフロント ―</p>
+        <div class="title-cats" id="title-cats"></div>
+        <button class="btn-primary big" id="btn-start">▶ ゲームスタート</button>
+        <p class="hint">PCはクリック / スマホはタップで にゃんこを出撃！</p>
+        <p class="disclaimer">オリジナルの無料・非営利ゲームです。実在の商品・サービスとは一切関係ありません。<br>All assets are AI-generated &amp; original. A free, non-commercial fan-made original game.</p>
+      </div>
+    </section>
+
+    <!-- ステージ選択 -->
+    <section id="stage-screen" class="screen">
+      <h2 class="screen-title">ステージをえらぶ</h2>
+      <div id="stage-list" class="stage-list"></div>
+      <button class="btn-ghost" data-goto="title-screen">← もどる</button>
+    </section>
+
+    <!-- バトル画面 -->
+    <section id="battle-screen" class="screen">
+      <div id="hud-top">
+        <div class="hp-block">
+          <span class="hp-label">🏰 みかた</span>
+          <div class="hp-bar"><div id="player-hp-fill" class="hp-fill ally"></div></div>
+        </div>
+        <div id="stage-name-tag">STAGE</div>
+        <div class="hp-block right">
+          <span class="hp-label">てき 💀</span>
+          <div class="hp-bar"><div id="enemy-hp-fill" class="hp-fill enemy"></div></div>
+        </div>
+      </div>
+
+      <div id="canvas-wrap">
+        <canvas id="game-canvas" width="1280" height="600"></canvas>
+        <div id="battle-banner" class="battle-banner"></div>
+      </div>
+
+      <div id="hud-bottom">
+        <div id="money-row">
+          <div id="money-display"><img src="assets/icon_coin.png" class="coin-icon" alt="" /><span id="money-text">0</span></div>
+          <div id="wallet-bar"><div id="wallet-fill"></div></div>
+          <button id="btn-upgrade-wallet" class="btn-mini">財布Lv<span id="wallet-lv">1</span><br><small id="wallet-cost">¥500</small></button>
+          <button id="btn-catfood" class="btn-mini food" title="キャットフード爆弾">
+            <img src="assets/item_catfood.png" alt="" /><span id="food-count">x3</span>
+          </button>
+          <button id="btn-pause" class="btn-mini">⏸</button>
+        </div>
+        <div id="unit-bar"><!-- ユニットボタンは JS が生成 --></div>
+      </div>
+    </section>
+
+    <!-- 結果画面 -->
+    <section id="result-screen" class="screen">
+      <div class="result-inner">
+        <h2 id="result-title">RESULT</h2>
+        <p id="result-text"></p>
+        <div class="result-btns">
+          <button class="btn-primary" id="btn-retry">もう一度</button>
+          <button class="btn-ghost" id="btn-to-stages">ステージ選択へ</button>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <div id="pause-overlay" class="overlay hidden">
+    <div class="overlay-card">
+      <h3>ポーズ中</h3>
+      <button class="btn-primary" id="btn-resume">▶ つづける</button>
+      <button class="btn-ghost" id="btn-give-up">ステージ選択へ</button>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+</body>
+</html>
