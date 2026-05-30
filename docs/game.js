@@ -56,16 +56,16 @@
   // ---------------------------------------------------------------- ユニット定義
   // hp,atk,range,interval(秒),speed(px/秒),kb=ノックバック回数,scale,ranged,area
   const UNITS = {
-    cat_basic:  { key:"cat_basic", name:"ねこ",     cost:75,   recharge:2.3,  hp:120,  atk:22,  range:95,  interval:1.0, speed:74, kb:2, scale:0.95, ranged:false, area:false },
-    cat_tank:   { key:"cat_tank",  name:"かべねこ", cost:110,  recharge:6.0,  hp:900,  atk:6,   range:80,  interval:1.6, speed:58, kb:3, scale:1.15, ranged:false, area:false },
+    cat_basic:  { key:"cat_basic", name:"ノラネコ", cost:75,   recharge:2.3,  hp:120,  atk:22,  range:95,  interval:1.0, speed:74, kb:2, scale:0.95, ranged:false, area:false },
+    cat_tank:   { key:"cat_tank",  name:"たてネコ", cost:110,  recharge:6.0,  hp:900,  atk:6,   range:80,  interval:1.6, speed:58, kb:3, scale:1.15, ranged:false, area:false },
     cat_battle: { key:"cat_battle",name:"バトル",   cost:220,  recharge:5.5,  hp:280,  atk:65,  range:105, interval:1.2, speed:78, kb:3, scale:1.05, ranged:false, area:false },
     cat_archer: { key:"cat_archer",name:"アーチャー",cost:330, recharge:8.5,  hp:130,  atk:55,  range:360, interval:1.9, speed:66, kb:2, scale:1.0,  ranged:true,  area:false },
-    cat_titan:  { key:"cat_titan", name:"巨神ねこ", cost:1250, recharge:42,   hp:3200, atk:420, range:125, interval:2.2, speed:36, kb:1, scale:1.6,  ranged:false, area:true  },
+    cat_titan:  { key:"cat_titan", name:"ギガネコ", cost:1250, recharge:42,   hp:3200, atk:420, range:125, interval:2.2, speed:36, kb:1, scale:1.6,  ranged:false, area:true  },
   };
   const UNIT_ORDER = ["cat_basic", "cat_tank", "cat_battle", "cat_archer", "cat_titan"];
 
   const ENEMIES = {
-    dog:   { key:"enemy_dog",  name:"わんこ",   hp:110,  atk:16,  range:90,  interval:1.0, speed:54, kb:2, scale:0.95, reward:45,  ranged:false, area:false },
+    dog:   { key:"enemy_dog",  name:"イヌ兵",   hp:110,  atk:16,  range:90,  interval:1.0, speed:54, kb:2, scale:0.95, reward:45,  ranged:false, area:false },
     snake: { key:"enemy_snake",name:"へび",     hp:230,  atk:28,  range:110, interval:1.3, speed:48, kb:2, scale:1.0,  reward:80,  ranged:false, area:false },
     pig:   { key:"enemy_pig",  name:"ブタ将軍", hp:1100, atk:34,  range:80,  interval:1.6, speed:34, kb:3, scale:1.2,  reward:170, ranged:false, area:false },
     bird:  { key:"enemy_bird", name:"とり",     hp:85,   atk:22,  range:75,  interval:0.7, speed:98, kb:1, scale:0.85, reward:65,  ranged:false, area:false },
@@ -78,7 +78,7 @@
   const STAGES = [
     {
       id: 1, name: "はじまりの草原", bg: "bg1",
-      desc: "わんこの大群がおしよせる！まずはここで にゃんこの戦い方を覚えよう。",
+      desc: "イヌ兵の大群がおしよせる！まずはここで ネコ兵の戦い方を覚えよう。",
       playerBaseHp: 5000, enemyBaseHp: 5500,
       baseSpawn: { e:"dog", interval: 11 },
       spawns: [
