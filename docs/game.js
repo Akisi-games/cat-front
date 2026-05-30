@@ -157,6 +157,82 @@
         ...rep(70, 1.6, 6, "bird"),
       ],
     },
+    {
+      id: 4, name: "みなとの突撃", bg: "bg2",
+      desc: "ブタ将軍の重装部隊と とりの波状攻撃。壁と火力の両立がカギ。",
+      playerBaseHp: 8000, enemyBaseHp: 16000,
+      baseSpawn: { e: "bird", interval: 6 },
+      spawns: [
+        ...rep(2, 1.6, 5, "bird"),
+        { t: 10, e: "pig" }, { t: 14, e: "pig" },
+        ...rep(20, 1.4, 6, "bird"),
+        { t: 30, e: "pig" }, { t: 33, e: "snake" }, { t: 36, e: "snake" },
+        { t: 44, e: "pig" }, { t: 46, e: "pig" },
+        ...rep(54, 1.8, 6, "snake"),
+        { t: 66, e: "pig" }, { t: 68, e: "pig" }, { t: 70, e: "pig" },
+      ],
+    },
+    {
+      id: 5, name: "真夜中の襲来", bg: "bg3",
+      desc: "夜陰に乗じて魔王ドグが再び。物量で押し切られる前に決めろ。",
+      playerBaseHp: 9000, enemyBaseHp: 18000,
+      baseSpawn: { e: "snake", interval: 7 },
+      spawns: [
+        ...rep(2, 2.0, 4, "dog"),
+        ...rep(8, 1.4, 5, "bird"),
+        { t: 18, e: "pig" }, { t: 20, e: "pig" },
+        { t: 30, e: "boss" },
+        ...rep(34, 1.6, 6, "snake"),
+        { t: 48, e: "pig" }, ...rep(50, 1.3, 6, "bird"),
+        { t: 64, e: "boss" },
+      ],
+    },
+    {
+      id: 6, name: "鋼鉄の要塞", bg: "bg1",
+      desc: "ブタ将軍だらけの鉄壁布陣。範囲攻撃で一気に押し込め！",
+      playerBaseHp: 10000, enemyBaseHp: 22000,
+      baseSpawn: { e: "pig", interval: 9 },
+      spawns: [
+        { t: 2, e: "pig" }, { t: 5, e: "pig" }, { t: 8, e: "pig" },
+        ...rep(14, 1.4, 6, "bird"),
+        { t: 24, e: "pig" }, { t: 26, e: "pig" }, { t: 28, e: "pig" },
+        ...rep(36, 1.8, 6, "snake"),
+        { t: 48, e: "pig" }, { t: 50, e: "pig" }, { t: 52, e: "pig" }, { t: 54, e: "pig" },
+        { t: 64, e: "boss" },
+      ],
+    },
+    {
+      id: 7, name: "双魔王降臨", bg: "bg3",
+      desc: "2体の魔王ドグが同時に襲い来る。全戦力を注ぎ込め。",
+      playerBaseHp: 11000, enemyBaseHp: 26000,
+      baseSpawn: { e: "bird", interval: 6 },
+      spawns: [
+        ...rep(2, 1.6, 6, "bird"),
+        { t: 12, e: "pig" }, { t: 15, e: "pig" },
+        { t: 24, e: "boss" },
+        ...rep(28, 1.5, 6, "snake"),
+        { t: 40, e: "pig" }, { t: 42, e: "pig" }, { t: 44, e: "pig" },
+        { t: 54, e: "boss" },
+        ...rep(58, 1.3, 8, "bird"),
+      ],
+    },
+    {
+      id: 8, name: "最終決戦 ネコの戦線", bg: "bg2",
+      desc: "全ての敵が結集する最終ステージ。ここを制すれば真の英雄だ！",
+      playerBaseHp: 13000, enemyBaseHp: 32000,
+      baseSpawn: { e: "pig", interval: 6 },
+      spawns: [
+        ...rep(2, 1.4, 6, "bird"),
+        { t: 10, e: "pig" }, { t: 12, e: "pig" },
+        { t: 18, e: "boss" },
+        ...rep(22, 1.4, 8, "snake"),
+        { t: 36, e: "pig" }, { t: 38, e: "pig" }, { t: 40, e: "pig" },
+        { t: 46, e: "boss" },
+        ...rep(50, 1.2, 10, "bird"),
+        { t: 66, e: "boss" },
+        { t: 70, e: "pig" }, { t: 72, e: "pig" },
+      ],
+    },
   ];
 
   // 財布レベル: cap=最大所持金, rate=毎秒回復, cost=次の強化費用
@@ -899,6 +975,36 @@
     el.classList.remove("pulse"); void el.offsetWidth; el.classList.add("pulse");
   }
 
+  // ---------------------------------------------------------------- コード入力
+  function openCodeModal() {
+    const inp = document.getElementById("code-input");
+    const msg = document.getElementById("code-msg");
+    inp.value = ""; msg.textContent = ""; msg.className = "code-msg";
+    document.getElementById("code-overlay").classList.remove("hidden");
+    setTimeout(() => inp.focus(), 50);
+  }
+  function closeCodeModal() {
+    document.getElementById("code-overlay").classList.add("hidden");
+  }
+  function redeemCode() {
+    const inp = document.getElementById("code-input");
+    const msg = document.getElementById("code-msg");
+    const code = (inp.value || "").trim();
+    if (!code) { msg.className = "code-msg ng"; msg.textContent = "コードを入力してください"; return; }
+    if (code === "アキシ") {
+      Save.points += 1000; saveSave(); sfx("coin");
+      msg.className = "code-msg ok"; msg.textContent = "🎉 1000ポイント獲得！";
+    } else if (code === "裏技") {
+      Save.points += 10000; Save.owned = [...ALL_UNITS]; saveSave(); sfx("win");
+      msg.className = "code-msg ok"; msg.textContent = "🎉 10000pt ＆ 全キャラ解放！";
+    } else {
+      msg.className = "code-msg ng"; msg.textContent = "無効なコードです";
+    }
+    inp.value = "";
+    const sp = document.getElementById("stage-points"); if (sp) sp.textContent = Save.points;
+    const gp = document.getElementById("gacha-points"); if (gp) gp.textContent = Save.points;
+  }
+
   // ---------------------------------------------------------------- イベント
   function bindUI() {
     document.getElementById("btn-start").addEventListener("click", () => {
@@ -933,6 +1039,12 @@
     document.getElementById("btn-pull1").addEventListener("click", () => doGacha(1));
     document.getElementById("btn-pull10").addEventListener("click", () => doGacha(10));
     document.getElementById("btn-result-gacha").addEventListener("click", () => { buildGachaScreen(); showScreen("gacha-screen"); });
+
+    // コード入力
+    document.getElementById("btn-code").addEventListener("click", openCodeModal);
+    document.getElementById("btn-code-redeem").addEventListener("click", redeemCode);
+    document.getElementById("btn-code-close").addEventListener("click", closeCodeModal);
+    document.getElementById("code-input").addEventListener("keydown", (e) => { if (e.key === "Enter") redeemCode(); });
 
     // タイトルの飾りネコ
     document.getElementById("title-cats").textContent = "🐱  😼  🦁  🏹  🛡️";

@@ -197,10 +197,16 @@ html, body {
 .pt-box { font-weight: 900; color: var(--gold); font-size: 16px; background: rgba(0,0,0,.3); padding: 6px 14px; border-radius: 20px; }
 .btn-nav { font-family: inherit; font-weight: 800; font-size: 14px; color: var(--cream); background: var(--panel-2); border: 2px solid rgba(255,255,255,.2); border-radius: 12px; padding: 8px 16px; cursor: pointer; }
 .btn-nav:active { transform: translateY(2px); }
-.btn-nav.gacha { background: linear-gradient(#ff7eb6,#d63a78); color: #fff; border-color: #ffb0d4; margin-left: auto; }
-.btn-nav:not(.gacha) { margin-left: auto; }
-.nav-bar .gacha + .btn-nav, .nav-bar .btn-nav.gacha { margin-left: 0; }
+.btn-nav.gacha { background: linear-gradient(#ff7eb6,#d63a78); color: #fff; border-color: #ffb0d4; }
+.btn-nav.code { background: linear-gradient(#7ee0c0,#2ea88a); color: #04342a; border-color: #aef0dd; }
 .nav-bar .pt-box { margin-right: auto; }
+
+/* ---- コード入力モーダル ---- */
+.overlay-card input { width: 100%; font-family: inherit; font-size: 18px; padding: 11px 12px; border-radius: 10px; border: 2px solid rgba(255,255,255,.3); background: #0c1322; color: #fff; text-align: center; margin-bottom: 6px; outline: none; }
+.overlay-card input:focus { border-color: var(--gold); }
+.code-msg { min-height: 20px; font-size: 14px; font-weight: 800; margin: 6px 0 12px; }
+.code-msg.ok { color: #7CFC9B; }
+.code-msg.ng { color: #ff7a90; }
 .screen-note { color: #b6c4e4; font-size: 13px; margin: 4px 16px 16px; text-align: center; max-width: 640px; }
 .pulse { animation: pulseRed .4s ease; }
 @keyframes pulseRed { 0%,100%{ transform: scale(1);} 50%{ transform: scale(1.15); background:#ff5a76; color:#fff; } }
