@@ -14,7 +14,7 @@ import { fileURLToPath } from "node:url";
 import { Jimp } from "jimp";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const OUT_DIR = path.join(__dirname, "public", "assets");
+const OUT_DIR = path.join(__dirname, "docs", "assets");
 
 // ---- 共通スタイル ----------------------------------------------------------
 const STYLE =
@@ -38,6 +38,18 @@ const ASSETS = [
     prompt:`a sleek green ninja cat archer holding a wooden bow with arrow drawn, cool focused expression, ${SPR_R}, ${STYLE}` },
   { file:"cat_titan.png",  transparent:true, w:1024, h:1024, seed:15,
     prompt:`a gigantic muscular golden titan cat, heroic powerful, glowing golden aura, mighty pose, ${SPR_R}, ${STYLE}` },
+
+  // ===== ガチャ追加キャラ (右向き) =====
+  { file:"cat_kitten.png", transparent:true, w:1024, h:1024, seed:16,
+    prompt:`a tiny adorable baby kitten with huge sparkly eyes, super cute and small, wobbly cute pose, ${SPR_R}, ${STYLE}` },
+  { file:"cat_ninja.png",  transparent:true, w:1024, h:1024, seed:17,
+    prompt:`a sneaky black ninja cat wearing a dark mask and scarf, holding a shuriken, agile crouching pose, ${SPR_R}, ${STYLE}` },
+  { file:"cat_mage.png",   transparent:true, w:1024, h:1024, seed:18,
+    prompt:`a purple wizard cat wearing a tall pointed star hat, holding a glowing magic staff, casting sparkles, ${SPR_R}, ${STYLE}` },
+  { file:"cat_samurai.png",transparent:true, w:1024, h:1024, seed:19,
+    prompt:`a noble samurai cat in red lacquered armor wielding a katana, fierce honorable warrior stance, ${SPR_R}, ${STYLE}` },
+  { file:"cat_dragon.png", transparent:true, w:1024, h:1024, seed:20,
+    prompt:`a majestic legendary dragon-cat hybrid with feathered wings and shiny scales, breathing a small flame, epic powerful, ${SPR_R}, ${STYLE}` },
 
   // ===== 敵ユニット (左向き) =====
   { file:"enemy_dog.png",   transparent:true, w:1024, h:1024, seed:21,

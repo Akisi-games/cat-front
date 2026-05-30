@@ -1,5 +1,5 @@
 /* ============================================================
-   にゃんこ大決戦 — スタイル
+   CAT FRONT — スタイル
    ============================================================ */
 :root {
   --ink: #2a2030;
@@ -189,10 +189,64 @@ html, body {
 .overlay-card h3 { margin: 0 0 18px; color: var(--gold); font-size: 26px; }
 .overlay-card button { display: block; width: 100%; margin: 8px 0; }
 
+/* ============================================================
+   編成・ガチャ 共通
+   ============================================================ */
+#team-screen, #gacha-screen { background: radial-gradient(circle at 50% 25%, #233a6b, #0d1424); justify-content: flex-start; padding-top: 64px; overflow-y: auto; }
+.nav-bar { position: absolute; top: 0; left: 0; right: 0; display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: var(--panel); border-bottom: 2px solid rgba(0,0,0,.4); z-index: 5; }
+.pt-box { font-weight: 900; color: var(--gold); font-size: 16px; background: rgba(0,0,0,.3); padding: 6px 14px; border-radius: 20px; }
+.btn-nav { font-family: inherit; font-weight: 800; font-size: 14px; color: var(--cream); background: var(--panel-2); border: 2px solid rgba(255,255,255,.2); border-radius: 12px; padding: 8px 16px; cursor: pointer; }
+.btn-nav:active { transform: translateY(2px); }
+.btn-nav.gacha { background: linear-gradient(#ff7eb6,#d63a78); color: #fff; border-color: #ffb0d4; margin-left: auto; }
+.btn-nav:not(.gacha) { margin-left: auto; }
+.nav-bar .gacha + .btn-nav, .nav-bar .btn-nav.gacha { margin-left: 0; }
+.nav-bar .pt-box { margin-right: auto; }
+.screen-note { color: #b6c4e4; font-size: 13px; margin: 4px 16px 16px; text-align: center; max-width: 640px; }
+.pulse { animation: pulseRed .4s ease; }
+@keyframes pulseRed { 0%,100%{ transform: scale(1);} 50%{ transform: scale(1.15); background:#ff5a76; color:#fff; } }
+
+/* ---- 編成グリッド ---- */
+.roster-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(132px, 1fr)); gap: 12px; width: 100%; max-width: 760px; padding: 0 16px 30px; }
+.roster-card { position: relative; background: linear-gradient(#2b3f6e, #1b2a4a); border: 3px solid var(--rar, rgba(255,255,255,.18)); border-radius: 16px; padding: 10px 8px 8px; text-align: center; cursor: pointer; transition: transform .08s; box-shadow: 0 0 0 rgba(0,0,0,0); }
+.roster-card:active { transform: scale(.95); }
+.roster-card.in-team { box-shadow: 0 0 16px var(--rar); background: linear-gradient(#3a5690, #243a64); }
+.roster-card.locked { opacity: .5; filter: grayscale(.7); cursor: default; }
+.roster-card .rc-img { height: 84px; display: flex; align-items: center; justify-content: center; }
+.roster-card .rc-img img { max-height: 84px; max-width: 100%; object-fit: contain; }
+.roster-card .ph { font-size: 48px; }
+.roster-card .rc-rar { font-weight: 900; font-size: 13px; letter-spacing: 1px; }
+.roster-card .rc-name { font-weight: 800; font-size: 14px; margin-top: 2px; }
+.roster-card .rc-stat { font-size: 10.5px; color: #aebbdc; margin-top: 2px; line-height: 1.4; }
+.roster-card .rc-slot { position: absolute; top: -8px; right: -8px; width: 26px; height: 26px; border-radius: 50%; background: var(--gold); color: #6b3e00; font-weight: 900; display: flex; align-items: center; justify-content: center; font-size: 14px; box-shadow: 0 2px 6px rgba(0,0,0,.5); }
+
+/* ---- ガチャ ---- */
+.gacha-result { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; min-height: 220px; align-items: center; width: 100%; max-width: 720px; padding: 10px 16px; }
+.gacha-hint { color: #b6c4e4; font-size: 15px; }
+.gacha-card { width: 130px; background: linear-gradient(#243a64, #16233f); border: 3px solid var(--rar); border-radius: 16px; padding: 10px 8px; text-align: center; box-shadow: 0 0 18px var(--rar); animation: popIn .45s cubic-bezier(.2,1.3,.5,1) both; }
+.gacha-card.rar-SR { animation: popInSR .6s cubic-bezier(.2,1.3,.5,1) both; }
+.gacha-card img { width: 92px; height: 92px; object-fit: contain; }
+.gacha-card .ph { font-size: 60px; }
+.gacha-card .gc-rar { font-weight: 900; font-size: 15px; letter-spacing: 1px; }
+.gacha-card .gc-name { font-weight: 800; font-size: 14px; margin-top: 2px; }
+.gacha-card .gc-tag { margin-top: 5px; font-size: 11px; font-weight: 800; padding: 2px 6px; border-radius: 8px; display: inline-block; }
+.gacha-card .gc-tag.new { background: #2ec27e; color: #04341f; }
+.gacha-card .gc-tag.dup { background: #44537a; color: #cdd8f0; }
+@keyframes popIn { 0%{ opacity:0; transform: scale(.3) rotate(-12deg);} 100%{ opacity:1; transform: scale(1) rotate(0);} }
+@keyframes popInSR { 0%{ opacity:0; transform: scale(.2) rotate(-20deg);} 60%{ transform: scale(1.2) rotate(6deg);} 100%{ opacity:1; transform: scale(1) rotate(0);} }
+.gacha-actions { display: flex; gap: 16px; justify-content: center; align-items: center; margin: 10px 0 4px; }
+.gacha-actions .btn-primary small { font-weight: 700; opacity: .85; }
+
+/* ---- ユニットボタンのレア表示 ---- */
+.unit-btn { border-color: var(--rar, rgba(255,255,255,.18)); }
+.unit-btn .u-rar { position: absolute; top: 2px; left: 4px; font-size: 9px; font-weight: 900; letter-spacing: -1px; }
+.reward-pt { color: var(--gold); font-weight: 900; font-size: 22px; }
+#btn-result-gacha.gacha { background: linear-gradient(#ff7eb6,#d63a78); color:#fff; border-color:#ffb0d4; }
+
 /* ---- レスポンシブ ---- */
 @media (max-width: 600px) {
   .hp-bar { max-width: 160px; }
   #money-display { font-size: 16px; min-width: 86px; }
   .unit-btn { width: 72px; }
   .unit-btn .u-img { width: 46px; height: 46px; }
+  .roster-grid { grid-template-columns: repeat(auto-fill, minmax(108px, 1fr)); }
 }

@@ -19,6 +19,11 @@
     cat_battle: "assets/cat_battle.png",
     cat_archer: "assets/cat_archer.png",
     cat_titan: "assets/cat_titan.png",
+    cat_kitten: "assets/cat_kitten.png",
+    cat_ninja: "assets/cat_ninja.png",
+    cat_mage: "assets/cat_mage.png",
+    cat_samurai: "assets/cat_samurai.png",
+    cat_dragon: "assets/cat_dragon.png",
     enemy_dog: "assets/enemy_dog.png",
     enemy_snake: "assets/enemy_snake.png",
     enemy_pig: "assets/enemy_pig.png",
@@ -48,21 +53,49 @@
   const FALLBACK = {
     cat_basic: ["🐱", "#fff"], cat_tank: ["🛡️", "#9aa7b5"], cat_battle: ["😼", "#ff8a3d"],
     cat_archer: ["🏹", "#4fae6b"], cat_titan: ["🦁", "#ffd34d"],
+    cat_kitten: ["🐈", "#ffe0e6"], cat_ninja: ["🥷", "#444a66"], cat_mage: ["🪄", "#a06bff"],
+    cat_samurai: ["⚔️", "#d64545"], cat_dragon: ["🐲", "#3fc98a"],
     enemy_dog: ["🐶", "#b07a4a"], enemy_snake: ["🐍", "#ff7ab0"], enemy_pig: ["🐷", "#e88"],
     enemy_bird: ["🐦", "#5aa9ff"], enemy_boss: ["👹", "#c0392b"],
     base_player: ["🏰", "#7fd0e8"], base_enemy: ["💀", "#c0392b"],
   };
 
-  // ---------------------------------------------------------------- ユニット定義
-  // hp,atk,range,interval(秒),speed(px/秒),kb=ノックバック回数,scale,ranged,area
-  const UNITS = {
-    cat_basic:  { key:"cat_basic", name:"ノラネコ", cost:75,   recharge:2.3,  hp:120,  atk:22,  range:95,  interval:1.0, speed:74, kb:2, scale:0.95, ranged:false, area:false },
-    cat_tank:   { key:"cat_tank",  name:"たてネコ", cost:110,  recharge:6.0,  hp:900,  atk:6,   range:80,  interval:1.6, speed:58, kb:3, scale:1.15, ranged:false, area:false },
-    cat_battle: { key:"cat_battle",name:"バトル",   cost:220,  recharge:5.5,  hp:280,  atk:65,  range:105, interval:1.2, speed:78, kb:3, scale:1.05, ranged:false, area:false },
-    cat_archer: { key:"cat_archer",name:"アーチャー",cost:330, recharge:8.5,  hp:130,  atk:55,  range:360, interval:1.9, speed:66, kb:2, scale:1.0,  ranged:true,  area:false },
-    cat_titan:  { key:"cat_titan", name:"ギガネコ", cost:1250, recharge:42,   hp:3200, atk:420, range:125, interval:2.2, speed:36, kb:1, scale:1.6,  ranged:false, area:true  },
+  // ---------------------------------------------------------------- レア度
+  const RARITY = {
+    N:  { label:"★",   name:"ノーマル", color:"#9fd0ff", glow:"#4cc9f0" },
+    R:  { label:"★★",  name:"レア",     color:"#caa6ff", glow:"#9b6bff" },
+    SR: { label:"★★★", name:"超レア",   color:"#ffd86b", glow:"#ffb02e" },
   };
-  const UNIT_ORDER = ["cat_basic", "cat_tank", "cat_battle", "cat_archer", "cat_titan"];
+
+  // ---------------------------------------------------------------- ユニット定義
+  // hp,atk,range,interval(秒),speed(px/秒),kb=ノックバック回数,scale,ranged,area,rarity
+  const UNITS = {
+    cat_basic:  { key:"cat_basic", name:"ノラネコ", rarity:"N",  cost:75,   recharge:2.3,  hp:120,  atk:22,  range:95,  interval:1.0, speed:74, kb:2, scale:0.95, ranged:false, area:false },
+    cat_tank:   { key:"cat_tank",  name:"たてネコ", rarity:"N",  cost:110,  recharge:6.0,  hp:900,  atk:6,   range:80,  interval:1.6, speed:58, kb:3, scale:1.15, ranged:false, area:false },
+    cat_battle: { key:"cat_battle",name:"バトル",   rarity:"R",  cost:220,  recharge:5.5,  hp:280,  atk:65,  range:105, interval:1.2, speed:78, kb:3, scale:1.05, ranged:false, area:false },
+    cat_archer: { key:"cat_archer",name:"アーチャー",rarity:"R", cost:330, recharge:8.5,  hp:130,  atk:55,  range:360, interval:1.9, speed:66, kb:2, scale:1.0,  ranged:true,  area:false },
+    cat_titan:  { key:"cat_titan", name:"ギガネコ", rarity:"SR", cost:1250, recharge:42,   hp:3200, atk:420, range:125, interval:2.2, speed:36, kb:1, scale:1.6,  ranged:false, area:true  },
+    // ===== ガチャ限定キャラ =====
+    cat_kitten: { key:"cat_kitten",name:"こねこ",   rarity:"N",  cost:55,   recharge:1.8,  hp:80,   atk:16,  range:80,  interval:0.8, speed:90, kb:1, scale:0.78, ranged:false, area:false },
+    cat_ninja:  { key:"cat_ninja", name:"にんじゃネコ",rarity:"R",cost:240, recharge:5.0,  hp:230,  atk:80,  range:95,  interval:0.9, speed:102,kb:3, scale:0.95, ranged:false, area:false },
+    cat_mage:   { key:"cat_mage",  name:"まほうネコ",rarity:"R", cost:390,  recharge:9.0,  hp:160,  atk:70,  range:330, interval:2.0, speed:60, kb:2, scale:1.0,  ranged:true,  area:true  },
+    cat_samurai:{ key:"cat_samurai",name:"サムライネコ",rarity:"SR",cost:600,recharge:14,  hp:760,  atk:230, range:115, interval:1.4, speed:72, kb:2, scale:1.2,  ranged:false, area:false },
+    cat_dragon: { key:"cat_dragon",name:"ドラゴンネコ",rarity:"SR",cost:950, recharge:30,  hp:2000, atk:330, range:155, interval:2.0, speed:50, kb:1, scale:1.5,  ranged:false, area:true  },
+  };
+  // 最初から所持している5体
+  const STARTER_UNITS = ["cat_basic", "cat_tank", "cat_battle", "cat_archer", "cat_titan"];
+  // ガチャ排出プール (排出率 weight。強キャラほど低確率)
+  const GACHA_POOL = [
+    { key:"cat_kitten",  weight:42 },
+    { key:"cat_ninja",   weight:23 },
+    { key:"cat_mage",    weight:18 },
+    { key:"cat_samurai", weight:11 },
+    { key:"cat_dragon",  weight:6  },
+  ];
+  const GACHA_COST = 100;        // 1回のポイント
+  const GACHA_DUP_REFUND = 40;   // かぶり時の返却ポイント
+  const TEAM_MAX = 5;            // 編成スロット数
+  const ALL_UNITS = ["cat_basic","cat_tank","cat_battle","cat_archer","cat_titan","cat_kitten","cat_ninja","cat_mage","cat_samurai","cat_dragon"];
 
   const ENEMIES = {
     dog:   { key:"enemy_dog",  name:"イヌ兵",   hp:110,  atk:16,  range:90,  interval:1.0, speed:54, kb:2, scale:0.95, reward:45,  ranged:false, area:false },
@@ -171,12 +204,30 @@
     result: null, lastTs: 0, shake: 0,
   };
 
-  // 進行状況 (クリア済みステージ)
-  function loadProgress() {
-    try { return JSON.parse(localStorage.getItem("nyanko_progress") || "{}"); }
-    catch { return {}; }
+  // ---------------------------------------------------------------- セーブデータ
+  // owned: 所持キャラ, points: ガチャ用ポイント, team: 編成(最大5), progress: クリア済み
+  const SAVE_KEY = "catfront_save_v1";
+  const Save = { owned: [...STARTER_UNITS], points: 0, team: [...STARTER_UNITS], progress: {} };
+
+  function loadSave() {
+    try {
+      const raw = localStorage.getItem(SAVE_KEY);
+      if (raw) {
+        const s = JSON.parse(raw);
+        Save.owned = Array.isArray(s.owned) && s.owned.length ? s.owned.filter(k => UNITS[k]) : [...STARTER_UNITS];
+        Save.points = typeof s.points === "number" ? s.points : 0;
+        Save.team = Array.isArray(s.team) && s.team.length ? s.team.filter(k => UNITS[k] && Save.owned.includes(k)) : [];
+        Save.progress = s.progress && typeof s.progress === "object" ? s.progress : {};
+      } else {
+        // 旧セーブからの移行
+        try { const old = JSON.parse(localStorage.getItem("nyanko_progress") || "{}"); Save.progress = old; } catch {}
+      }
+    } catch {}
+    // 所持しているのにチームが空なら先頭5体を自動編成
+    if (!Save.team.length) Save.team = Save.owned.slice(0, TEAM_MAX);
+    saveSave();
   }
-  function saveProgress(p) { try { localStorage.setItem("nyanko_progress", JSON.stringify(p)); } catch {} }
+  function saveSave() { try { localStorage.setItem(SAVE_KEY, JSON.stringify(Save)); } catch {} }
 
   // ---------------------------------------------------------------- ユーティリティ
   function makeFighter(def, side, x) {
@@ -208,7 +259,7 @@
     Game.effects = []; Game.texts = [];
     Game.spawnQueue = stage.spawns.map(s => ({ ...s, done: false }));
     Game.baseSpawnTimer = stage.baseSpawn ? stage.baseSpawn.interval : 0;
-    Game.cooldowns = {}; UNIT_ORDER.forEach(k => Game.cooldowns[k] = 0);
+    Game.cooldowns = {}; Save.team.forEach(k => Game.cooldowns[k] = 0);
     Game.foodCount = 3; Game.foodCooldown = 0;
     Game.result = null; Game.shake = 0;
 
@@ -240,7 +291,7 @@
     Game.money = Math.min(cap, Game.money + walletRate(Game.walletLv) * dt);
 
     // --- クールダウン ---
-    for (const k of UNIT_ORDER) if (Game.cooldowns[k] > 0) Game.cooldowns[k] = Math.max(0, Game.cooldowns[k] - dt);
+    for (const k of Save.team) if (Game.cooldowns[k] > 0) Game.cooldowns[k] = Math.max(0, Game.cooldowns[k] - dt);
     if (Game.foodCooldown > 0) Game.foodCooldown = Math.max(0, Game.foodCooldown - dt);
 
     // --- 敵スポーン (スケジュール) ---
@@ -615,14 +666,17 @@
   function buildUnitBar() {
     const bar = document.getElementById("unit-bar");
     bar.innerHTML = "";
-    for (const key of UNIT_ORDER) {
+    for (const key of Save.team) {
       const def = UNITS[key];
+      if (!def) continue;
+      const r = RARITY[def.rarity];
       const btn = document.createElement("button");
       btn.className = "unit-btn"; btn.dataset.key = key;
+      btn.style.setProperty("--rar", r.glow);
       const im = imgFor(def.key);
       const imgHtml = im ? `<img class="u-img" src="${ASSET_FILES[def.key]}" alt="">`
                         : `<div class="u-img" style="font-size:38px">${(FALLBACK[def.key]||["🐱"])[0]}</div>`;
-      btn.innerHTML = `${imgHtml}
+      btn.innerHTML = `<span class="u-rar" style="color:${r.color}">${r.label}</span>${imgHtml}
         <div class="u-name">${def.name}</div>
         <div class="u-cost">¥${def.cost}</div>
         <div class="cooldown hidden">0</div>`;
@@ -683,16 +737,24 @@
     Game.result = win ? "win" : "lose";
     Game.running = false;
     sfx(win ? "win" : "lose");
+    let earned = 0, firstClear = false;
     if (win) {
-      const p = loadProgress(); p["s" + Game.stage.id] = true; saveProgress(p);
+      const id = Game.stage.id;
+      firstClear = !Save.progress["s" + id];
+      earned = firstClear ? (120 + 80 * id) : (40 + 20 * id);
+      Save.progress["s" + id] = true;
+      Save.points += earned;
+      saveSave();
     }
     setTimeout(() => {
       const title = document.getElementById("result-title");
       title.textContent = win ? "勝利！" : "敗北…";
       title.className = win ? "win" : "lose";
-      document.getElementById("result-text").textContent = win
-        ? `STAGE ${Game.stage.id}「${Game.stage.name}」を制圧した！`
-        : `自陣が崩壊した…もう一度挑戦しよう。`;
+      document.getElementById("result-text").innerHTML = win
+        ? `STAGE ${Game.stage.id}「${Game.stage.name}」を制圧した！<br>` +
+          `<span class="reward-pt">🎁 ${earned} ポイント獲得${firstClear ? "（初クリアボーナス！）" : ""}</span><br>` +
+          `<small>所持ポイント: ${Save.points}　ガチャで新キャラをGET！</small>`
+        : `自陣が崩壊した…編成やガチャを見直してもう一度挑戦しよう。`;
       showScreen("result-screen");
     }, 900);
   }
@@ -704,7 +766,9 @@
 
   function buildStageList() {
     const list = document.getElementById("stage-list");
-    const prog = loadProgress();
+    const prog = Save.progress;
+    const ptEl = document.getElementById("stage-points");
+    if (ptEl) ptEl.textContent = Save.points;
     list.innerHTML = "";
     STAGES.forEach((st, i) => {
       const unlocked = i === 0 || prog["s" + STAGES[i - 1].id];
@@ -719,6 +783,120 @@
       if (unlocked) card.addEventListener("click", () => { if (actx) actx.resume(); startStage(st); });
       list.appendChild(card);
     });
+  }
+
+  // ---------------------------------------------------------------- ガチャ
+  function rollGacha() {
+    const total = GACHA_POOL.reduce((s, p) => s + p.weight, 0);
+    let r = Math.random() * total;
+    for (const p of GACHA_POOL) { if ((r -= p.weight) < 0) return p.key; }
+    return GACHA_POOL[GACHA_POOL.length - 1].key;
+  }
+
+  function doGacha(count) {
+    const cost = GACHA_COST * count;
+    if (Save.points < cost) { pulse(document.getElementById("gacha-points-box")); return; }
+    Save.points -= cost;
+    const results = [];
+    for (let i = 0; i < count; i++) {
+      const key = rollGacha();
+      const isNew = !Save.owned.includes(key);
+      if (isNew) Save.owned.push(key);
+      else Save.points += GACHA_DUP_REFUND;
+      results.push({ key, isNew });
+    }
+    saveSave();
+    sfx(results.some(r => UNITS[r.key].rarity === "SR") ? "win" : "coin");
+    showGachaResults(results);
+    updateGachaHeader();
+  }
+
+  function showGachaResults(results) {
+    const box = document.getElementById("gacha-result");
+    box.innerHTML = "";
+    results.forEach((res, idx) => {
+      const def = UNITS[res.key];
+      const r = RARITY[def.rarity];
+      const im = imgFor(def.key);
+      const imgHtml = im ? `<img src="${ASSET_FILES[def.key]}" alt="">`
+                         : `<div class="ph">${(FALLBACK[def.key] || ["🐱"])[0]}</div>`;
+      const card = document.createElement("div");
+      card.className = `gacha-card rar-${def.rarity}`;
+      card.style.setProperty("--rar", r.glow);
+      card.style.animationDelay = (idx * 0.08) + "s";
+      card.innerHTML = `<div class="gc-rar" style="color:${r.color}">${r.label}</div>
+        ${imgHtml}
+        <div class="gc-name">${def.name}</div>
+        <div class="gc-tag ${res.isNew ? "new" : "dup"}">${res.isNew ? "NEW!" : "かぶり +" + GACHA_DUP_REFUND + "pt"}</div>`;
+      box.appendChild(card);
+    });
+  }
+
+  function buildGachaScreen() {
+    updateGachaHeader();
+    const box = document.getElementById("gacha-result");
+    if (box && !box.dataset.kept) box.innerHTML = `<p class="gacha-hint">★★★ほど出にくい超レア！ポイントを貯めて引こう。</p>`;
+  }
+
+  function updateGachaHeader() {
+    document.getElementById("gacha-points").textContent = Save.points;
+    document.getElementById("btn-pull1").disabled = Save.points < GACHA_COST;
+    document.getElementById("btn-pull10").disabled = Save.points < GACHA_COST * 10;
+  }
+
+  // ---------------------------------------------------------------- 編成
+  const UNIT_STAT_LABEL = (def) =>
+    `体力 ${def.hp} / 攻撃 ${def.atk}${def.ranged ? " / 遠" : ""}${def.area ? " / 範囲" : ""}`;
+
+  function buildTeamScreen() {
+    updateTeamHeader();
+    const grid = document.getElementById("roster-grid");
+    grid.innerHTML = "";
+    for (const key of ALL_UNITS) {
+      const def = UNITS[key];
+      const owned = Save.owned.includes(key);
+      const inTeam = Save.team.includes(key);
+      const teamIdx = Save.team.indexOf(key);
+      const r = RARITY[def.rarity];
+      const im = imgFor(def.key);
+      const imgHtml = im ? `<img src="${ASSET_FILES[def.key]}" alt="">`
+                         : `<div class="ph">${(FALLBACK[def.key] || ["🐱"])[0]}</div>`;
+      const card = document.createElement("div");
+      card.className = "roster-card" + (owned ? "" : " locked") + (inTeam ? " in-team" : "");
+      card.style.setProperty("--rar", r.glow);
+      card.innerHTML = `
+        <div class="rc-rar" style="color:${r.color}">${r.label}</div>
+        ${inTeam ? `<div class="rc-slot">${teamIdx + 1}</div>` : ""}
+        <div class="rc-img">${owned ? imgHtml : `<div class="ph lock">🔒</div>`}</div>
+        <div class="rc-name">${owned ? def.name : "？？？"}</div>
+        <div class="rc-stat">${owned ? UNIT_STAT_LABEL(def) : "ガチャで入手"}</div>`;
+      if (owned) card.addEventListener("click", () => toggleTeam(key));
+      grid.appendChild(card);
+    }
+  }
+
+  function toggleTeam(key) {
+    const i = Save.team.indexOf(key);
+    if (i >= 0) {
+      if (Save.team.length <= 1) { pulse(document.getElementById("team-count-box")); return; }
+      Save.team.splice(i, 1);
+    } else {
+      if (Save.team.length >= TEAM_MAX) { pulse(document.getElementById("team-count-box")); return; }
+      Save.team.push(key);
+    }
+    sfx("deploy");
+    saveSave();
+    buildTeamScreen();
+  }
+
+  function updateTeamHeader() {
+    document.getElementById("team-count").textContent = Save.team.length;
+    document.getElementById("team-max").textContent = TEAM_MAX;
+  }
+
+  function pulse(el) {
+    if (!el) return;
+    el.classList.remove("pulse"); void el.offsetWidth; el.classList.add("pulse");
   }
 
   // ---------------------------------------------------------------- イベント
@@ -747,6 +925,15 @@
     document.getElementById("btn-retry").addEventListener("click", () => startStage(Game.stage));
     document.getElementById("btn-to-stages").addEventListener("click", () => { buildStageList(); showScreen("stage-screen"); });
 
+    // 編成・ガチャ
+    document.getElementById("btn-team").addEventListener("click", () => { buildTeamScreen(); showScreen("team-screen"); });
+    document.getElementById("btn-gacha").addEventListener("click", () => { buildGachaScreen(); showScreen("gacha-screen"); });
+    document.getElementById("btn-team-back").addEventListener("click", () => { buildStageList(); showScreen("stage-screen"); });
+    document.getElementById("btn-gacha-back").addEventListener("click", () => { buildStageList(); showScreen("stage-screen"); });
+    document.getElementById("btn-pull1").addEventListener("click", () => doGacha(1));
+    document.getElementById("btn-pull10").addEventListener("click", () => doGacha(10));
+    document.getElementById("btn-result-gacha").addEventListener("click", () => { buildGachaScreen(); showScreen("gacha-screen"); });
+
     // タイトルの飾りネコ
     document.getElementById("title-cats").textContent = "🐱  😼  🦁  🏹  🛡️";
 
@@ -754,12 +941,13 @@
     window.addEventListener("keydown", (e) => {
       if (!Game.running || Game.paused) return;
       const n = parseInt(e.key, 10);
-      if (n >= 1 && n <= UNIT_ORDER.length) deployUnit(UNIT_ORDER[n - 1]);
+      if (n >= 1 && n <= Save.team.length) deployUnit(Save.team[n - 1]);
       if (e.key.toLowerCase() === "f") useFood();
     });
   }
 
   // ---------------------------------------------------------------- 起動
   loadAssets();
+  loadSave();
   bindUI();
 })();
