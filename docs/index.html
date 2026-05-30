@@ -17,7 +17,7 @@
         <p class="game-sub">― キャットフロント ―</p>
         <div class="title-cats" id="title-cats"></div>
         <button class="btn-primary big" id="btn-start">▶ ゲームスタート</button>
-        <p class="hint">PCはクリック / スマホはタップで ネコ兵を出撃！</p>
+        <p class="hint">PCはクリック / スマホはタップで キャット兵を出撃！</p>
         <p class="disclaimer">オリジナルの無料・非営利ゲームです。実在の商品・サービスとは一切関係ありません。<br>All assets are AI-generated &amp; original. A free, non-commercial fan-made original game.</p>
       </div>
     </section>
@@ -41,7 +41,7 @@
         <div class="pt-box" id="team-count-box">編成 <span id="team-count">0</span>/<span id="team-max">5</span></div>
         <button class="btn-nav" id="btn-team-back">← ステージへ</button>
       </div>
-      <h2 class="screen-title">編成 — バトルに出すネコをえらぶ</h2>
+      <h2 class="screen-title">編成 — バトルに出すキャットをえらぶ</h2>
       <p class="screen-note">カードをタップでチームに入れ替え（最大5体）。🔒はガチャで入手。</p>
       <div id="roster-grid" class="roster-grid"></div>
     </section>
@@ -52,13 +52,13 @@
         <div class="pt-box" id="gacha-points-box">🎁 <span id="gacha-points">0</span> pt</div>
         <button class="btn-nav" id="btn-gacha-back">← ステージへ</button>
       </div>
-      <h2 class="screen-title">ネコガチャ</h2>
+      <h2 class="screen-title">キャットガチャ</h2>
       <div id="gacha-result" class="gacha-result"></div>
       <div class="gacha-actions">
         <button class="btn-primary" id="btn-pull1">1回引く<br><small>100 pt</small></button>
         <button class="btn-primary big" id="btn-pull10">10回引く<br><small>1000 pt</small></button>
       </div>
-      <p class="screen-note">排出率：★ 42% / ★★ 41% / ★★★ <b>17%</b>（サムライ11%・ドラゴン6%）。かぶりは +40pt 還元。</p>
+      <p class="screen-note">排出率：★ 40% / ★★ 39% / ★★★ 20.5% / <b>★★★★ ゴッドキャット 0.5%</b>。かぶりは +40pt 還元。</p>
     </section>
 
     <!-- バトル画面 -->
@@ -78,6 +78,7 @@
       <div id="canvas-wrap">
         <canvas id="game-canvas" width="1280" height="600"></canvas>
         <div id="battle-banner" class="battle-banner"></div>
+        <div id="rotate-hint">📱↔️ 横画面（よこ）にすると遊びやすいよ</div>
       </div>
 
       <div id="hud-bottom">

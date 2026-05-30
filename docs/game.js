@@ -24,6 +24,11 @@
     cat_mage: "assets/cat_mage.png",
     cat_samurai: "assets/cat_samurai.png",
     cat_dragon: "assets/cat_dragon.png",
+    cat_healer: "assets/cat_healer.png",
+    cat_knight: "assets/cat_knight.png",
+    cat_valkyrie: "assets/cat_valkyrie.png",
+    cat_god: "assets/cat_god.png",
+    cat_phoenix: "assets/cat_phoenix.png",
     enemy_dog: "assets/enemy_dog.png",
     enemy_snake: "assets/enemy_snake.png",
     enemy_pig: "assets/enemy_pig.png",
@@ -55,6 +60,8 @@
     cat_archer: ["🏹", "#4fae6b"], cat_titan: ["🦁", "#ffd34d"],
     cat_kitten: ["🐈", "#ffe0e6"], cat_ninja: ["🥷", "#444a66"], cat_mage: ["🪄", "#a06bff"],
     cat_samurai: ["⚔️", "#d64545"], cat_dragon: ["🐲", "#3fc98a"],
+    cat_healer: ["💚", "#8ff0c0"], cat_knight: ["🛡️", "#cfd6e6"], cat_valkyrie: ["🪽", "#ffe08a"],
+    cat_god: ["✨", "#fff0b0"], cat_phoenix: ["🔥", "#ff8a3d"],
     enemy_dog: ["🐶", "#b07a4a"], enemy_snake: ["🐍", "#ff7ab0"], enemy_pig: ["🐷", "#e88"],
     enemy_bird: ["🐦", "#5aa9ff"], enemy_boss: ["👹", "#c0392b"],
     base_player: ["🏰", "#7fd0e8"], base_enemy: ["💀", "#c0392b"],
@@ -62,43 +69,55 @@
 
   // ---------------------------------------------------------------- レア度
   const RARITY = {
-    N:  { label:"★",   name:"ノーマル", color:"#9fd0ff", glow:"#4cc9f0" },
-    R:  { label:"★★",  name:"レア",     color:"#caa6ff", glow:"#9b6bff" },
-    SR: { label:"★★★", name:"超レア",   color:"#ffd86b", glow:"#ffb02e" },
+    N:  { label:"★",    name:"ノーマル", color:"#9fd0ff", glow:"#4cc9f0" },
+    R:  { label:"★★",   name:"レア",     color:"#caa6ff", glow:"#9b6bff" },
+    SR: { label:"★★★",  name:"超レア",   color:"#ffd86b", glow:"#ffb02e" },
+    UR: { label:"★★★★", name:"伝説",     color:"#ff7ad9", glow:"#ff3fb0" },
   };
 
   // ---------------------------------------------------------------- ユニット定義
-  // hp,atk,range,interval(秒),speed(px/秒),kb=ノックバック回数,scale,ranged,area,rarity
+  // hp,atk,range,interval(秒),speed,kb,scale,ranged,area,rarity / heal系: heal=回復量,healRange,healInterval
   const UNITS = {
-    cat_basic:  { key:"cat_basic", name:"ノラネコ", rarity:"N",  cost:75,   recharge:2.3,  hp:120,  atk:22,  range:95,  interval:1.0, speed:74, kb:2, scale:0.95, ranged:false, area:false },
-    cat_tank:   { key:"cat_tank",  name:"たてネコ", rarity:"N",  cost:110,  recharge:6.0,  hp:900,  atk:6,   range:80,  interval:1.6, speed:58, kb:3, scale:1.15, ranged:false, area:false },
-    cat_battle: { key:"cat_battle",name:"バトル",   rarity:"R",  cost:220,  recharge:5.5,  hp:280,  atk:65,  range:105, interval:1.2, speed:78, kb:3, scale:1.05, ranged:false, area:false },
-    cat_archer: { key:"cat_archer",name:"アーチャー",rarity:"R", cost:330, recharge:8.5,  hp:130,  atk:55,  range:360, interval:1.9, speed:66, kb:2, scale:1.0,  ranged:true,  area:false },
-    cat_titan:  { key:"cat_titan", name:"ギガネコ", rarity:"SR", cost:1250, recharge:42,   hp:3200, atk:420, range:125, interval:2.2, speed:36, kb:1, scale:1.6,  ranged:false, area:true  },
+    cat_basic:  { key:"cat_basic", name:"ノラキャット", rarity:"N",  cost:75,   recharge:2.3,  hp:120,  atk:22,  range:95,  interval:1.0, speed:74, kb:2, scale:0.95, ranged:false, area:false },
+    cat_tank:   { key:"cat_tank",  name:"たてキャット", rarity:"N",  cost:110,  recharge:6.0,  hp:900,  atk:6,   range:80,  interval:1.6, speed:58, kb:3, scale:1.15, ranged:false, area:false },
+    cat_battle: { key:"cat_battle",name:"バトル",       rarity:"R",  cost:220,  recharge:5.5,  hp:280,  atk:65,  range:105, interval:1.2, speed:78, kb:3, scale:1.05, ranged:false, area:false },
+    cat_archer: { key:"cat_archer",name:"アーチャー",   rarity:"R",  cost:330,  recharge:8.5,  hp:130,  atk:55,  range:360, interval:1.9, speed:66, kb:2, scale:1.0,  ranged:true,  area:false },
+    cat_titan:  { key:"cat_titan", name:"ギガキャット", rarity:"SR", cost:1250, recharge:42,   hp:3200, atk:420, range:125, interval:2.2, speed:36, kb:1, scale:1.6,  ranged:false, area:true  },
     // ===== ガチャ限定キャラ =====
-    cat_kitten: { key:"cat_kitten",name:"こねこ",   rarity:"N",  cost:55,   recharge:1.8,  hp:80,   atk:16,  range:80,  interval:0.8, speed:90, kb:1, scale:0.78, ranged:false, area:false },
-    cat_ninja:  { key:"cat_ninja", name:"にんじゃネコ",rarity:"R",cost:240, recharge:5.0,  hp:230,  atk:80,  range:95,  interval:0.9, speed:102,kb:3, scale:0.95, ranged:false, area:false },
-    cat_mage:   { key:"cat_mage",  name:"まほうネコ",rarity:"R", cost:390,  recharge:9.0,  hp:160,  atk:70,  range:330, interval:2.0, speed:60, kb:2, scale:1.0,  ranged:true,  area:true  },
-    cat_samurai:{ key:"cat_samurai",name:"サムライネコ",rarity:"SR",cost:600,recharge:14,  hp:760,  atk:230, range:115, interval:1.4, speed:72, kb:2, scale:1.2,  ranged:false, area:false },
-    cat_dragon: { key:"cat_dragon",name:"ドラゴンネコ",rarity:"SR",cost:950, recharge:30,  hp:2000, atk:330, range:155, interval:2.0, speed:50, kb:1, scale:1.5,  ranged:false, area:true  },
+    cat_kitten: { key:"cat_kitten",name:"ベビーキャット",rarity:"N", cost:55,   recharge:1.8,  hp:80,   atk:16,  range:80,  interval:0.8, speed:90, kb:1, scale:0.78, ranged:false, area:false },
+    cat_ninja:  { key:"cat_ninja", name:"にんじゃキャット",rarity:"R",cost:240, recharge:5.0,  hp:230,  atk:80,  range:95,  interval:0.9, speed:102,kb:3, scale:0.95, ranged:false, area:false },
+    cat_mage:   { key:"cat_mage",  name:"まほうキャット",rarity:"R", cost:390,  recharge:9.0,  hp:160,  atk:70,  range:330, interval:2.0, speed:60, kb:2, scale:1.0,  ranged:true,  area:true  },
+    cat_samurai:{ key:"cat_samurai",name:"サムライキャット",rarity:"SR",cost:600,recharge:14,  hp:760,  atk:230, range:115, interval:1.4, speed:72, kb:2, scale:1.2,  ranged:false, area:false },
+    cat_dragon: { key:"cat_dragon",name:"ドラゴンキャット",rarity:"SR",cost:950, recharge:30,  hp:2000, atk:330, range:155, interval:2.0, speed:50, kb:1, scale:1.5,  ranged:false, area:true  },
+    // ===== ステージ報酬キャラ (ほどほどの強さ) =====
+    cat_healer: { key:"cat_healer",name:"ヒーラーキャット",rarity:"R",cost:260, recharge:7.0,  hp:240,  atk:20,  range:100, interval:1.5, speed:66, kb:2, scale:1.0,  ranged:false, area:false, heal:45,  healRange:185, healInterval:1.8 },
+    cat_knight: { key:"cat_knight",name:"ナイトキャット",rarity:"R", cost:300,  recharge:6.5,  hp:620,  atk:90,  range:100, interval:1.3, speed:64, kb:3, scale:1.1,  ranged:false, area:false },
+    cat_valkyrie:{key:"cat_valkyrie",name:"ヴァルキャット",rarity:"R",cost:420, recharge:9.5,  hp:340,  atk:120, range:170, interval:1.5, speed:74, kb:2, scale:1.05, ranged:false, area:true  },
+    // ===== 追加ガチャキャラ =====
+    cat_phoenix:{ key:"cat_phoenix",name:"フェニックスキャット",rarity:"SR",cost:880,recharge:26, hp:1500, atk:300, range:170, interval:1.7, speed:58, kb:2, scale:1.4, ranged:false, area:true },
+    cat_god:    { key:"cat_god",   name:"ゴッドキャット",rarity:"UR",cost:1100, recharge:35,  hp:2600, atk:380, range:150, interval:1.8, speed:52, kb:2, scale:1.55, ranged:false, area:true, heal:160, healRange:240, healInterval:2.0 },
   };
   // 最初から所持している5体
   const STARTER_UNITS = ["cat_basic", "cat_tank", "cat_battle", "cat_archer", "cat_titan"];
-  // ガチャ排出プール (排出率 weight。強キャラほど低確率)
+  // ステージクリア報酬キャラ (ステージID → キャラ)
+  const STAGE_REWARDS = { 3: "cat_healer", 8: "cat_knight", 15: "cat_valkyrie" };
+  // ガチャ排出プール (weight = 排出率%。強キャラほど低確率。神様=0.5%)
   const GACHA_POOL = [
-    { key:"cat_kitten",  weight:42 },
-    { key:"cat_ninja",   weight:23 },
-    { key:"cat_mage",    weight:18 },
-    { key:"cat_samurai", weight:11 },
+    { key:"cat_kitten",  weight:40 },
+    { key:"cat_ninja",   weight:22 },
+    { key:"cat_mage",    weight:17 },
+    { key:"cat_samurai", weight:10 },
     { key:"cat_dragon",  weight:6  },
+    { key:"cat_phoenix", weight:4.5 },
+    { key:"cat_god",     weight:0.5 },
   ];
   const GACHA_COST = 100;        // 1回のポイント
   const GACHA_DUP_REFUND = 40;   // かぶり時の返却ポイント
   const TEAM_MAX = 5;            // 編成スロット数
-  const ALL_UNITS = ["cat_basic","cat_tank","cat_battle","cat_archer","cat_titan","cat_kitten","cat_ninja","cat_mage","cat_samurai","cat_dragon"];
+  const ALL_UNITS = ["cat_basic","cat_tank","cat_battle","cat_archer","cat_titan","cat_healer","cat_knight","cat_valkyrie","cat_kitten","cat_ninja","cat_mage","cat_samurai","cat_dragon","cat_phoenix","cat_god"];
 
   const ENEMIES = {
-    dog:   { key:"enemy_dog",  name:"イヌ兵",   hp:110,  atk:16,  range:90,  interval:1.0, speed:54, kb:2, scale:0.95, reward:45,  ranged:false, area:false },
+    dog:   { key:"enemy_dog",  name:"イヌー",   hp:110,  atk:16,  range:90,  interval:1.0, speed:54, kb:2, scale:0.95, reward:45,  ranged:false, area:false },
     snake: { key:"enemy_snake",name:"へび",     hp:230,  atk:28,  range:110, interval:1.3, speed:48, kb:2, scale:1.0,  reward:80,  ranged:false, area:false },
     pig:   { key:"enemy_pig",  name:"ブタ将軍", hp:1100, atk:34,  range:80,  interval:1.6, speed:34, kb:3, scale:1.2,  reward:170, ranged:false, area:false },
     bird:  { key:"enemy_bird", name:"とり",     hp:85,   atk:22,  range:75,  interval:0.7, speed:98, kb:1, scale:0.85, reward:65,  ranged:false, area:false },
@@ -111,7 +130,7 @@
   const STAGES = [
     {
       id: 1, name: "はじまりの草原", bg: "bg1",
-      desc: "イヌ兵の大群がおしよせる！まずはここで ネコ兵の戦い方を覚えよう。",
+      desc: "イヌーの大群がおしよせる！まずはここで キャット兵の戦い方を覚えよう。",
       playerBaseHp: 5000, enemyBaseHp: 5500,
       baseSpawn: { e:"dog", interval: 11 },
       spawns: [
@@ -217,7 +236,7 @@
       ],
     },
     {
-      id: 8, name: "最終決戦 ネコの戦線", bg: "bg2",
+      id: 8, name: "最終決戦 キャットの戦線", bg: "bg2",
       desc: "全ての敵が結集する最終ステージ。ここを制すれば真の英雄だ！",
       playerBaseHp: 13000, enemyBaseHp: 32000,
       baseSpawn: { e: "pig", interval: 6 },
@@ -231,6 +250,109 @@
         ...rep(50, 1.2, 10, "bird"),
         { t: 66, e: "boss" },
         { t: 70, e: "pig" }, { t: 72, e: "pig" },
+      ],
+    },
+    {
+      id: 9, name: "砂塵の進軍", bg: "bg2",
+      desc: "果てなき軍勢の進軍。回復役で前線を維持しよう。",
+      playerBaseHp: 14000, enemyBaseHp: 36000,
+      baseSpawn: { e: "bird", interval: 5 },
+      spawns: [
+        ...rep(2, 1.3, 7, "bird"),
+        { t: 12, e: "pig" }, { t: 14, e: "pig" }, { t: 16, e: "pig" },
+        { t: 24, e: "boss" },
+        ...rep(28, 1.3, 8, "snake"),
+        { t: 42, e: "pig" }, { t: 44, e: "pig" }, { t: 46, e: "pig" },
+        { t: 56, e: "boss" },
+        ...rep(60, 1.2, 10, "bird"),
+      ],
+    },
+    {
+      id: 10, name: "業火の渓谷", bg: "bg2",
+      desc: "灼熱の谷で巨獣たちが咆哮する。火力勝負だ。",
+      playerBaseHp: 15000, enemyBaseHp: 40000,
+      baseSpawn: { e: "pig", interval: 7 },
+      spawns: [
+        { t: 2, e: "pig" }, { t: 4, e: "pig" }, { t: 6, e: "pig" },
+        ...rep(12, 1.3, 8, "bird"),
+        { t: 24, e: "boss" }, { t: 28, e: "pig" }, { t: 30, e: "pig" },
+        ...rep(38, 1.3, 8, "snake"),
+        { t: 52, e: "boss" },
+        ...rep(56, 1.1, 10, "bird"),
+      ],
+    },
+    {
+      id: 11, name: "氷結回廊", bg: "bg3",
+      desc: "凍てつく回廊を埋め尽くす大群。回復と壁で耐え抜け。",
+      playerBaseHp: 16000, enemyBaseHp: 46000,
+      baseSpawn: { e: "snake", interval: 6 },
+      spawns: [
+        ...rep(2, 1.2, 9, "bird"),
+        { t: 14, e: "pig" }, { t: 16, e: "pig" }, { t: 18, e: "pig" },
+        { t: 26, e: "boss" },
+        ...rep(30, 1.2, 9, "snake"),
+        { t: 44, e: "pig" }, { t: 46, e: "pig" },
+        { t: 54, e: "boss" }, { t: 58, e: "boss" },
+      ],
+    },
+    {
+      id: 12, name: "雷鳴の平原", bg: "bg1",
+      desc: "雷轟く平原での総力戦。2体の魔王が同時に出現。",
+      playerBaseHp: 18000, enemyBaseHp: 52000,
+      baseSpawn: { e: "bird", interval: 5 },
+      spawns: [
+        ...rep(2, 1.2, 8, "bird"),
+        { t: 12, e: "pig" }, { t: 14, e: "pig" }, { t: 16, e: "pig" }, { t: 18, e: "pig" },
+        { t: 26, e: "boss" }, { t: 30, e: "boss" },
+        ...rep(34, 1.2, 10, "snake"),
+        { t: 50, e: "pig" }, { t: 52, e: "pig" }, { t: 54, e: "pig" },
+        { t: 62, e: "boss" },
+      ],
+    },
+    {
+      id: 13, name: "深淵の門", bg: "bg3",
+      desc: "深淵から無限に湧く魔の軍勢。回復役なしでは厳しい。",
+      playerBaseHp: 20000, enemyBaseHp: 60000,
+      baseSpawn: { e: "pig", interval: 6 },
+      spawns: [
+        { t: 2, e: "pig" }, { t: 4, e: "pig" }, { t: 6, e: "pig" },
+        ...rep(12, 1.1, 10, "bird"),
+        { t: 24, e: "boss" }, { t: 28, e: "boss" },
+        ...rep(32, 1.1, 10, "snake"),
+        { t: 46, e: "pig" }, { t: 48, e: "pig" }, { t: 50, e: "pig" }, { t: 52, e: "pig" },
+        { t: 60, e: "boss" }, { t: 64, e: "boss" },
+      ],
+    },
+    {
+      id: 14, name: "終焉の序曲", bg: "bg2",
+      desc: "終わりの始まり。3体の魔王が君臨する。",
+      playerBaseHp: 22000, enemyBaseHp: 70000,
+      baseSpawn: { e: "bird", interval: 4.5 },
+      spawns: [
+        ...rep(2, 1.1, 10, "bird"),
+        { t: 14, e: "boss" },
+        { t: 18, e: "pig" }, { t: 20, e: "pig" }, { t: 22, e: "pig" },
+        { t: 30, e: "boss" },
+        ...rep(34, 1.0, 12, "snake"),
+        { t: 50, e: "pig" }, { t: 52, e: "pig" }, { t: 54, e: "pig" },
+        { t: 62, e: "boss" },
+        ...rep(66, 1.0, 10, "bird"),
+      ],
+    },
+    {
+      id: 15, name: "神々の戦場", bg: "bg3",
+      desc: "全てを懸けた最終決戦。神の力をその手に掴め！",
+      playerBaseHp: 26000, enemyBaseHp: 85000,
+      baseSpawn: { e: "pig", interval: 4.5 },
+      spawns: [
+        ...rep(2, 1.0, 10, "bird"),
+        { t: 12, e: "boss" }, { t: 14, e: "pig" }, { t: 16, e: "pig" },
+        { t: 24, e: "boss" }, { t: 28, e: "boss" },
+        ...rep(32, 0.9, 14, "snake"),
+        { t: 48, e: "pig" }, { t: 50, e: "pig" }, { t: 52, e: "pig" }, { t: 54, e: "pig" },
+        { t: 60, e: "boss" }, { t: 64, e: "boss" },
+        ...rep(68, 0.9, 12, "bird"),
+        { t: 82, e: "boss" },
       ],
     },
   ];
@@ -283,7 +405,7 @@
   // ---------------------------------------------------------------- セーブデータ
   // owned: 所持キャラ, points: ガチャ用ポイント, team: 編成(最大5), progress: クリア済み
   const SAVE_KEY = "catfront_save_v1";
-  const Save = { owned: [...STARTER_UNITS], points: 0, team: [...STARTER_UNITS], progress: {} };
+  const Save = { owned: [...STARTER_UNITS], points: 0, team: [...STARTER_UNITS], progress: {}, codes: [] };
 
   function loadSave() {
     try {
@@ -294,6 +416,7 @@
         Save.points = typeof s.points === "number" ? s.points : 0;
         Save.team = Array.isArray(s.team) && s.team.length ? s.team.filter(k => UNITS[k] && Save.owned.includes(k)) : [];
         Save.progress = s.progress && typeof s.progress === "object" ? s.progress : {};
+        Save.codes = Array.isArray(s.codes) ? s.codes : [];
       } else {
         // 旧セーブからの移行
         try { const old = JSON.parse(localStorage.getItem("nyanko_progress") || "{}"); Save.progress = old; } catch {}
@@ -319,6 +442,7 @@
       lane: Math.random() * 26 - 13,   // 見た目の上下ずらし
       bob: Math.random() * Math.PI * 2,
       flash: 0,
+      healTimer: def.heal ? def.healInterval * 0.5 : 0,
     };
   }
 
@@ -430,6 +554,12 @@
       f.bob += dt * 9;
       if (f.flash > 0) f.flash -= dt;
 
+      // 回復アビリティ (常時)
+      if (f.def.heal) {
+        f.healTimer -= dt;
+        if (f.healTimer <= 0) { f.healTimer = f.def.healInterval; doHeal(f); }
+      }
+
       // ノックバック中
       if (f.state === "kb") {
         f.kbTimer -= dt;
@@ -496,6 +626,21 @@
       if (target) { dealDamage(target, def.atk); spawnHitFx(target.x, GROUND_Y - 50, "#fff", 18); }
       else if (baseInRange) { damageBase(f.side === "ally", def.atk); spawnHitFx(dir>0?ENEMY_FRONT:ALLY_FRONT, GROUND_Y-70, "#fff", 22); }
     }
+  }
+
+  function doHeal(healer) {
+    const friends = healer.side === "ally" ? Game.allies : Game.enemies;
+    let healed = false;
+    for (const a of friends) {
+      if (a === healer || a.hp <= 0 || a.hp >= a.maxHp) continue;
+      if (Math.abs(a.x - healer.x) <= healer.def.healRange) {
+        a.hp = Math.min(a.maxHp, a.hp + healer.def.heal);
+        a.flash = 0.1;
+        spawnHitFx(a.x, GROUND_Y - 70 + a.lane, "#7CFC9B", 16);
+        healed = true;
+      }
+    }
+    if (healed) Game.texts.push({ x: healer.x, y: GROUND_Y - 130, vy: -28, life: 0.9, text: "♥ HEAL", color: "#7CFC9B" });
   }
 
   function dealDamage(f, dmg) {
@@ -813,24 +958,32 @@
     Game.result = win ? "win" : "lose";
     Game.running = false;
     sfx(win ? "win" : "lose");
-    let earned = 0, firstClear = false;
+    let earned = 0, firstClear = false, rewardKey = null;
     if (win) {
       const id = Game.stage.id;
       firstClear = !Save.progress["s" + id];
       earned = firstClear ? (120 + 80 * id) : (40 + 20 * id);
       Save.progress["s" + id] = true;
       Save.points += earned;
+      // ステージ報酬キャラ (初クリアかつ未所持のみ)
+      const rk = STAGE_REWARDS[id];
+      if (firstClear && rk && !Save.owned.includes(rk)) { Save.owned.push(rk); rewardKey = rk; }
       saveSave();
     }
     setTimeout(() => {
       const title = document.getElementById("result-title");
       title.textContent = win ? "勝利！" : "敗北…";
       title.className = win ? "win" : "lose";
+      let rewardHtml = "";
+      if (rewardKey) {
+        const rd = UNITS[rewardKey];
+        rewardHtml = `<br><span class="reward-char">🎉 新キャラ「${rd.name}」を入手！編成に加えよう</span>`;
+      }
       document.getElementById("result-text").innerHTML = win
         ? `STAGE ${Game.stage.id}「${Game.stage.name}」を制圧した！<br>` +
-          `<span class="reward-pt">🎁 ${earned} ポイント獲得${firstClear ? "（初クリアボーナス！）" : ""}</span><br>` +
-          `<small>所持ポイント: ${Save.points}　ガチャで新キャラをGET！</small>`
-        : `自陣が崩壊した…編成やガチャを見直してもう一度挑戦しよう。`;
+          `<span class="reward-pt">🎁 ${earned} ポイント獲得${firstClear ? "（初クリアボーナス！）" : ""}</span>` +
+          rewardHtml + `<br><small>所持ポイント: ${Save.points}</small>`
+        : `自陣が崩壊した…編成やガチャ、回復役を見直してもう一度挑戦しよう。`;
       showScreen("result-screen");
     }, 900);
   }
@@ -991,11 +1144,14 @@
     const msg = document.getElementById("code-msg");
     const code = (inp.value || "").trim();
     if (!code) { msg.className = "code-msg ng"; msg.textContent = "コードを入力してください"; return; }
+    if ((code === "アキシ" || code === "裏技") && Save.codes.includes(code)) {
+      msg.className = "code-msg ng"; msg.textContent = "このコードは使用済みです"; inp.value = ""; return;
+    }
     if (code === "アキシ") {
-      Save.points += 1000; saveSave(); sfx("coin");
+      Save.points += 1000; Save.codes.push(code); saveSave(); sfx("coin");
       msg.className = "code-msg ok"; msg.textContent = "🎉 1000ポイント獲得！";
     } else if (code === "裏技") {
-      Save.points += 10000; Save.owned = [...ALL_UNITS]; saveSave(); sfx("win");
+      Save.points += 10000; Save.owned = [...ALL_UNITS]; Save.codes.push(code); saveSave(); sfx("win");
       msg.className = "code-msg ok"; msg.textContent = "🎉 10000pt ＆ 全キャラ解放！";
     } else {
       msg.className = "code-msg ng"; msg.textContent = "無効なコードです";

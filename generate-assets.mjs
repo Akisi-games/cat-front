@@ -51,6 +51,18 @@ const ASSETS = [
   { file:"cat_dragon.png", transparent:true, w:1024, h:1024, seed:20,
     prompt:`a majestic legendary dragon-cat hybrid with feathered wings and shiny scales, breathing a small flame, epic powerful, ${SPR_R}, ${STYLE}` },
 
+  // ===== 追加キャラ (回復・報酬・ガチャ) =====
+  { file:"cat_healer.png", transparent:true, w:1024, h:1024, seed:60,
+    prompt:`a gentle white and mint-green nurse priest cat with a glowing green healing halo, holding a small staff topped with a leaf cross, kind warm healing aura, ${SPR_R}, ${STYLE}` },
+  { file:"cat_knight.png", transparent:true, w:1024, h:1024, seed:61,
+    prompt:`a brave silver-armored knight cat holding a sword and a shield, noble heroic stance, shiny plate armor, ${SPR_R}, ${STYLE}` },
+  { file:"cat_valkyrie.png", transparent:true, w:1024, h:1024, seed:62,
+    prompt:`a fierce valkyrie warrior cat with small white angelic wings and golden helmet, wielding a golden spear, ${SPR_R}, ${STYLE}` },
+  { file:"cat_god.png", transparent:true, w:1024, h:1024, seed:63,
+    prompt:`a divine god deity cat with a radiant golden halo, ornate flowing celestial white and gold robes, holy glowing light rays, majestic supreme god-like presence, ${SPR_R}, ${STYLE}` },
+  { file:"cat_phoenix.png", transparent:true, w:1024, h:1024, seed:64,
+    prompt:`a blazing legendary phoenix cat with large fiery orange wings and flame aura, glowing embers, mythical reborn fire bird cat, ${SPR_R}, ${STYLE}` },
+
   // ===== 敵ユニット (左向き) =====
   { file:"enemy_dog.png",   transparent:true, w:1024, h:1024, seed:21,
     prompt:`a silly brown cartoon dog enemy with goofy grin and floppy ears, comedic villain look, ${SPR_L}, ${STYLE}` },
