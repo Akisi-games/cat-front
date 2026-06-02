@@ -11,6 +11,7 @@
   const GROUND_Y = 508;               // 地面ライン
   const ALLY_FRONT = 168;             // 自陣の最前線 x
   const ENEMY_FRONT = 1112;           // 敵陣の最前線 x
+  const ATK_DUR = 0.38;               // 攻撃モーションの長さ(秒)
 
   // ---------------------------------------------------------------- アセット
   const ASSET_FILES = {
@@ -442,6 +443,7 @@
       lane: Math.random() * 26 - 13,   // 見た目の上下ずらし
       bob: Math.random() * Math.PI * 2,
       flash: 0,
+      atkAnim: 0,                       // 攻撃モーションの残り時間
       healTimer: def.heal ? def.healInterval * 0.5 : 0,
     };
   }
@@ -551,8 +553,9 @@
     const targetBaseX = dir > 0 ? ENEMY_FRONT : ALLY_FRONT;
 
     for (const f of selfs) {
-      f.bob += dt * 9;
+      f.bob += dt * (f.state === "move" ? 11 : 7);
       if (f.flash > 0) f.flash -= dt;
+      if (f.atkAnim > 0) f.atkAnim = Math.max(0, f.atkAnim - dt);
 
       // 回復アビリティ (常時)
       if (f.def.heal) {
@@ -602,6 +605,7 @@
 
   function doAttack(f, dir, target, baseInRange) {
     const def = f.def;
+    f.atkAnim = ATK_DUR;   // 攻撃モーション発動
     if (def.ranged) {
       // 遠距離: プロジェクタイル発射
       sfx("shoot");
@@ -807,39 +811,70 @@
   function drawFighter(f) {
     const im = imgFor(f.def.key);
     const baseH = 150 * f.def.scale;
-    const bobY = Math.sin(f.bob) * 3;
-    const cx = f.x, cy = GROUND_Y + f.lane * 0.5;
     const w = baseH, h = baseH;
-    const drawX = cx - w / 2, drawY = cy - h + 18 + bobY;
-    const facingRight = f.side === "ally";   // 画像は自軍=右向き / 敵=左向きで生成
+    const cx = f.x, cy = GROUND_Y + f.lane * 0.5;
+    const footY = cy + 14;                       // 足元(回転・拡縮の支点)
+    const dirSign = f.side === "ally" ? 1 : -1;  // 前方(敵に向かう向き)
+
+    // ===== アニメーション計算 =====
+    let bobUp = 0, rot = 0, sx = 1, sy = 1, lungeX = 0;
+
+    if (f.state === "kb") {
+      // ノックバック: のけぞり＋ガタガタ
+      rot = -dirSign * 0.32 + Math.sin(f.bob * 5) * 0.06;
+      bobUp = Math.abs(Math.sin(f.bob * 4)) * 5;
+    } else {
+      // 歩行/待機: 上下バウンド＋スクワッシュ＆ストレッチ＋体の揺れ
+      const moving = f.state === "move";
+      const amp = moving ? 1 : 0.35;
+      const hop = Math.abs(Math.sin(f.bob));     // 0..1 (接地→頂点)
+      bobUp = hop * 6.5 * amp;
+      rot = Math.sin(f.bob) * 0.07 * amp * dirSign;
+      const sq = (1 - hop) * 0.07 * amp;          // 接地時につぶれる
+      sx = 1 + sq; sy = 1 - sq;
+    }
+
+    // 攻撃モーション: 前方への突き＋スケールパンチ＋反動(遠距離は後ろへリコイル)
+    if (f.atkAnim > 0) {
+      const t = 1 - f.atkAnim / ATK_DUR;          // 0→1
+      const tri = t < 0.32 ? (t / 0.32) : Math.max(0, 1 - (t - 0.32) / 0.68); // 0.32でピーク
+      const ranged = f.def.ranged;
+      lungeX += dirSign * tri * (ranged ? -12 : 22);
+      const boost = tri * 0.15;
+      sx += boost; sy += boost;
+      rot += dirSign * tri * (ranged ? -0.18 : 0.14);
+    }
 
     ctx.save();
-    // 影
+    // 影 (突進に少し追従)
     ctx.fillStyle = "rgba(0,0,0,0.22)";
-    ctx.beginPath(); ctx.ellipse(cx, cy + 12, w * 0.32, 10, 0, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(cx + lungeX * 0.5, footY, w * 0.30, 9, 0, 0, Math.PI * 2); ctx.fill();
 
+    ctx.translate(cx + lungeX, footY - bobUp);
+    ctx.rotate(rot);
+    ctx.scale(sx, sy);
     if (f.flash > 0) ctx.filter = "brightness(2.2)";
 
     if (im) {
-      ctx.drawImage(im, drawX, drawY, w, h);
+      ctx.drawImage(im, -w / 2, -h, w, h);        // 足元(y=0)に立たせる
     } else {
       const fb = FALLBACK[f.def.key] || ["❓", "#ccc"];
       ctx.fillStyle = fb[1];
-      roundRect(drawX + w*0.2, drawY + h*0.25, w*0.6, h*0.6, 14); ctx.fill();
+      roundRect(-w * 0.3, -h * 0.8, w * 0.6, h * 0.6, 14); ctx.fill();
       ctx.filter = "none";
-      ctx.font = `${Math.floor(baseH*0.5)}px serif`; ctx.textAlign = "center"; ctx.textBaseline = "middle";
-      ctx.fillText(fb[0], cx, cy - baseH*0.4);
+      ctx.font = `${Math.floor(baseH * 0.5)}px serif`; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+      ctx.fillText(fb[0], 0, -h * 0.55);
     }
     ctx.filter = "none";
+    ctx.restore();
 
-    // HPバー
+    // HPバー (回転させず通常座標で)
     const bw = Math.max(40, w * 0.5), bh = 6;
     const hpRatio = Math.max(0, f.hp / f.maxHp);
-    const bx = cx - bw / 2, by = drawY - 4;
+    const bx = cx - bw / 2, by = footY - h - bobUp - 2;
     ctx.fillStyle = "rgba(0,0,0,0.55)"; roundRect(bx - 1, by - 1, bw + 2, bh + 2, 3); ctx.fill();
     ctx.fillStyle = f.side === "ally" ? "#4cc9f0" : "#ff5a76";
     roundRect(bx, by, bw * hpRatio, bh, 3); ctx.fill();
-    ctx.restore();
   }
 
   function drawProjectiles() {
