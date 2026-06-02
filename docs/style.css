@@ -52,7 +52,9 @@ html, body {
 .game-sub { color: #ffe9a8; letter-spacing: 6px; margin: 6px 0 24px; font-size: clamp(12px, 2.5vw, 18px); }
 .title-cats { font-size: 48px; margin: 10px 0 28px; min-height: 60px; }
 .hint { color: #9fb0d0; font-size: 13px; margin-top: 18px; }
-.disclaimer { color: #6b7ca0; font-size: 11px; line-height: 1.6; margin-top: 22px; max-width: 540px; margin-left: auto; margin-right: auto; }
+.visit-counter { color: #ffe9a8; font-size: 14px; font-weight: 800; margin-top: 18px; letter-spacing: .5px; }
+.visit-counter #visit-count { color: var(--gold); }
+.disclaimer { color: #6b7ca0; font-size: 11px; line-height: 1.6; margin-top: 12px; max-width: 540px; margin-left: auto; margin-right: auto; }
 
 @keyframes bob { 0%,100% { transform: rotate(-2deg) translateY(0);} 50%{ transform: rotate(-2deg) translateY(-10px);} }
 

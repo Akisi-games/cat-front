@@ -1214,8 +1214,28 @@
     });
   }
 
+  // ---------------------------------------------------------------- アクセスカウンター
+  // 登録不要の無料ヒットカウンター(Abacus)。1セッション1回だけ加算し、総数を表示。
+  function setupVisitCounter() {
+    const el = document.getElementById("visit-count");
+    if (!el) return;
+    const BASE = "https://abacus.jasoncameron.dev";
+    const NS = "catfront-akisi-games", KEY = "visits";
+    const counted = sessionStorage.getItem("cf_counted");
+    const url = counted ? `${BASE}/get/${NS}/${KEY}` : `${BASE}/hit/${NS}/${KEY}`;
+    fetch(url)
+      .then((r) => r.json())
+      .then((d) => {
+        if (!counted) { try { sessionStorage.setItem("cf_counted", "1"); } catch {} }
+        if (typeof d.value === "number") el.textContent = d.value.toLocaleString();
+        else el.textContent = "—";
+      })
+      .catch(() => { el.textContent = "—"; });
+  }
+
   // ---------------------------------------------------------------- 起動
   loadAssets();
   loadSave();
   bindUI();
+  setupVisitCounter();
 })();
